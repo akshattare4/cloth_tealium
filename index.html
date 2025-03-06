@@ -107,8 +107,9 @@ var utag_data = {
         <h2>Watch Our Latest Fashion Trends</h2>
         <div class="video-container">
 <iframe id="video1" type="text/html" width="640" height="360"
-  src="https://www.youtube.com/embed/VIDEO_ID?enablejsapi=1"
-  frameborder="0"></iframe>        </div>
+    src="https://www.youtube.com/embed/yycVNcishrE?enablejsapi=1"
+    frameborder="0"></iframe>
+        </div>
     </section>
 
     <footer>
@@ -139,6 +140,38 @@ function currentSlide(n) {
     showSlides();
 }
 
+</script>
+    <script>
+  var player;
+  function onYouTubeIframeAPIReady() {
+    player = new YT.Player('video1', {
+      events: {
+        'onStateChange': onPlayerStateChange
+      }
+    });
+  }
+
+  function onPlayerStateChange(event) {
+    if (event.data == YT.PlayerState.PLAYING) {
+      utag.link({
+        "tealium_event": "video_play",
+        "video_id": player.getVideoData().video_id,
+        "video_title": player.getVideoData().title
+      });
+    } else if (event.data == YT.PlayerState.PAUSED) {
+      utag.link({
+        "tealium_event": "video_pause",
+        "video_id": player.getVideoData().video_id,
+        "video_title": player.getVideoData().title
+      });
+    } else if (event.data == YT.PlayerState.ENDED) {
+      utag.link({
+        "tealium_event": "video_complete",
+        "video_id": player.getVideoData().video_id,
+        "video_title": player.getVideoData().title
+      });
+    }
+  }
 </script>
     <script src="js/scripts.js"></script>
 </body>
